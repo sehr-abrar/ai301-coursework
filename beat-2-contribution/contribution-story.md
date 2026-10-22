@@ -55,31 +55,38 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: Built the issue-scout, and found my ranking filter was sorting by issue age instead of fitness.**
+**Unit 5: Built the issue-scout, then found that my search strategy — not my rubric — was the part that kept being wrong.**
 
-I installed the scout over my unit-1 issue-select skill and wrote it a
-search strategy: four `gh search issues` queries traced back to
-sentences in my fit profile (`good first issue`, `help wanted` and
-`documentation` labels on open, unassigned Python and JavaScript
-issues), plus ranking filters that drop assigned or heavily-commented
-results and order what survives by fewest comments first. The scan cost
-about a dollar and three of the five issues it paid to grade came from
-repos created that same afternoon, each seeded with a batch of good-
-first-issue tickets opened seconds apart; my rubric rejected all three
-on `maintainer-responsive`, but they should never have reached the
-paid stage, so I went and checked the pool myself rather than guessing
-why. Every one of the 373 issues my queries returned had been created
-within the previous 24 hours — `gh` returns the newest matches first,
-so my "drop anything not updated in 90 days" filter had dropped 0 of
-379 and could not possibly have fired, and "fewest comments first" was
-really sorting by age, because comments only accumulate over time.
-I added `--created` and `--updated` windows to every query so the
-search reaches the back catalogue, replaced the dead filter with one
-that compares `updatedAt` against `createdAt` (the gap is the
-living-tracker signal, not the absolute age of either), and tightened
-`maintainer-active` in the rubric so a repo with fewer than five
-commits of total history fails — it had been passing a one-commit repo
-on the strength of that single commit being recent and human.
+I installed the scout over my unit-1 issue-select skill and gave it a
+search strategy: four `gh search issues` queries traced to sentences in
+my fit profile, plus ranking filters that drop assigned or
+heavily-commented results and order what survives by fewest comments
+first. The scan cost about a dollar and three of the five issues it
+paid to grade came from repos created that same afternoon, so I checked
+the pool myself instead of guessing why, and found that all 373 issues
+my queries returned had been created within the previous 24 hours — `gh`
+returns newest-first, so my "drop anything not updated in 90 days"
+filter had dropped 0 of 379 and could not possibly fire, and "fewest
+comments first" was really sorting by age. My first fix was wrong
+twice over: the `--created` windows I added just slid the ceiling
+(every result came back pinned to the window's newest edge, spread
+zero), and the replacement filter I was proudest of — requiring a gap
+between an issue's creation and its last update — turned out to drop
+100 of 100 real results, because most issues are never touched again
+after filing, including the one I now want to work on. What finally
+worked was a search *term* on each query, which shrinks the corpus
+instead of repositioning the ceiling: coverage went from one repo and
+zero-day median age to 63-85 repos and back-catalogue depth of 1900+
+days, and the rule I took away is that a ranking filter which drops 0%
+or 100% of a live pool is not a filter — I had written one of each and
+could not tell them apart without measuring against real `gh` output.
+The rubric needed only two narrow patches, one of which the scout
+caught on itself: it rejected my issue because no maintainer had ever
+commented on any issue in that repo, which was true, but the maintainer
+merges outside contributors' pull requests in 23 minutes, so I taught
+`maintainer-responsive` to count a merged outside PR as a reply — as an
+additional way to pass, never a new way to fail, so my unit-1 eval
+bundles still grade the same.
 
 **Unit 6: [one line on the tool work]**
 
