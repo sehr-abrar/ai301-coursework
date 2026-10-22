@@ -55,10 +55,31 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: [one line on the tool work]**
+**Unit 5: Built the issue-scout, and found my ranking filter was sorting by issue age instead of fitness.**
 
-[2-4 sentences: what you built (the scout, your strategy), what broke
-or fell short, what changed because of it.]
+I installed the scout over my unit-1 issue-select skill and wrote it a
+search strategy: four `gh search issues` queries traced back to
+sentences in my fit profile (`good first issue`, `help wanted` and
+`documentation` labels on open, unassigned Python and JavaScript
+issues), plus ranking filters that drop assigned or heavily-commented
+results and order what survives by fewest comments first. The scan cost
+about a dollar and three of the five issues it paid to grade came from
+repos created that same afternoon, each seeded with a batch of good-
+first-issue tickets opened seconds apart; my rubric rejected all three
+on `maintainer-responsive`, but they should never have reached the
+paid stage, so I went and checked the pool myself rather than guessing
+why. Every one of the 373 issues my queries returned had been created
+within the previous 24 hours — `gh` returns the newest matches first,
+so my "drop anything not updated in 90 days" filter had dropped 0 of
+379 and could not possibly have fired, and "fewest comments first" was
+really sorting by age, because comments only accumulate over time.
+I added `--created` and `--updated` windows to every query so the
+search reaches the back catalogue, replaced the dead filter with one
+that compares `updatedAt` against `createdAt` (the gap is the
+living-tracker signal, not the absolute age of either), and tightened
+`maintainer-active` in the rubric so a repo with fewer than five
+commits of total history fails — it had been passing a one-commit repo
+on the strength of that single commit being recent and human.
 
 **Unit 6: [one line on the tool work]**
 
