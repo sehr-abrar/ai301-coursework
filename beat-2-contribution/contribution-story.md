@@ -183,9 +183,12 @@ the query myself and looking at the distribution of what came back,
 rather than reading the scan's prose. The tool is useful exactly to the
 degree that I check it.
 
-**Claim comment:** claim pending (as of 2026-11-01) — draft written and
-passing both my voice guard and `repro-check`; link goes here the moment
-it is posted.
+**Claim comment:** https://github.com/Zwony/ecotrace/issues/215#issuecomment-6563399356
+(posted 2026-11-01). I drafted it, failed my own `repro-check` once for
+promising a report-back date, cut the date, then reworded the opening
+and closing into my own voice before posting. I re-ran the voice guard
+against the text I actually sent rather than the text I had checked
+earlier, and it passed.
 
 **Toolkit**
 
