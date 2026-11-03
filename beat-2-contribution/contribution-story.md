@@ -11,7 +11,7 @@ files and no evidence uploads are part of Assignment 5.
 **Student:** Sehr Abrar
 **GitHub Username:** sehr-abrar
 **Issue:** https://github.com/Zwony/ecotrace/issues/215
-**Pull Request:** [GitHub PR link, once opened]
+**Pull Request:** https://github.com/Zwony/ecotrace/pull/248
 
 One repository, built across units 5 to 8, telling the whole story of your real
 contribution. Fill it as you work, not at the end — the sections below ask for evidence that
@@ -111,15 +111,54 @@ issue's topics, when it already answers a neighbouring one for
 Windows/macOS — each of which I verified against the file before
 accepting the correction.
 
-**Unit 7: [one line on the tool work]**
+**Unit 7: Built the ship-gate and my manifest, and it rejected my pull request four times before letting it out — every rejection a real defect.**
 
-[2-4 sentences: the ship-gate and your gate manifest. What it produced
-on your real branch, what fought you, what changed because of it.]
+The manifest was the first honest decision: I measured both checks on
+`main` before writing anything, which is how I found `flake8` already
+failing with 759 findings and `mkdocs build --strict` aborting on 60
+`griffe` warnings from docstrings in a tree my PR doesn't touch. Both
+went into the excluded table with dated reasons rather than being
+quietly dropped, which left my must-pass set only two deep — so I added
+`mkdocs build`, a check `CONTRIBUTING.MD` never names, because `pytest`
+and `flake8` between them cannot detect the one way a docs change
+actually breaks: a nav entry pointing at a file that doesn't exist.
+Then the gate rejected me four times, and the pattern across all four
+was the same: numbers and claims that drifted when I edited prose after
+writing the description. A stat line saying 189 insertions when the diff
+was 188. A description claiming the FAQ "links out for the error
+figures" while the page quoted them. Evidence generated at an older
+commit than the one under review. A grep table reading `RAPL → 15` after
+a rewording left it at 13. None of that would have looked like a lie to
+a reviewer, and all of it would have made the PR slightly untrue. The
+one that actually changed my thinking was `diff-within-plan`: my FAQ had
+called ≤15% "the one to look at for hardware-measured accuracy" while
+`plan.md` had committed to labelling it the page's *unsourced* claim —
+my own page had quietly promoted a number my own plan told me to hedge,
+and nothing but the gate was going to notice.
 
-**Unit 8: [one line on the tool work]**
+**Unit 8: Installed the PR-monitor and wrote a playbook whose thresholds came from the repo's record instead of my deadline — then it told me to do nothing, correctly.**
 
-[2-4 sentences: the PR-monitor and your playbook. What it read, what it
-drafted, what you did with the draft.]
+I built the staleness thresholds by measuring rather than guessing: across
+the last eight merged pull requests from outside contributors, excluding
+Zwony's own PRs and dependabot because both inflate the speed, the gap
+from opened to merged was a median of 5.8 hours and a maximum of 13.7,
+and not one outside PR has ever been closed unmerged. That gave me 3 days
+before a first-response nudge is even on the table — about five times the
+longest wait anyone there has had — and I wrote into the playbook that
+this is the rule I expect to be most tempted to break, because my
+submission is due Sunday and his schedule is not a fact about my course.
+The monitor's free `--state` canary then reported `FEEDBACK-IN`, which
+was wrong: the only thread entry is a SonarCloud bot posting that the
+Quality Gate passed, and the canary is a dumb classifier with no model
+call, so it counted a bot status comment as a review round. The full run
+caught what its own canary had missed — it drafted a wait note instead of
+a reply, named the misread explicitly ("writing one would mean inventing
+a reviewer's comment"), and cited my 3-day threshold against a PR that
+was six minutes old. So the move I took was to send nothing, which is the
+tool working rather than the tool failing. What I'd change is the state
+label itself: `FEEDBACK-IN` should discount bot-authored comments, since
+on a repo with CI bots it will fire on every single PR the moment checks
+report.
 
 ---
 
@@ -686,27 +725,72 @@ asking the question at claim time rather than at review time.
 
 ## Pull Request
 
-**PR Link:** [GitHub PR URL when opened]
+**PR Link:** https://github.com/Zwony/ecotrace/pull/248
 
-**PR Description:** [what the PR says; much of the content above
-adapts into it]
+**PR Description:** Opened 2026-11-02 against `Zwony/ecotrace` `main`
+from `sehr-abrar:docs/faq-troubleshooting`. Two files, +190/−0:
+`docs/FAQ.md` (new) and one nav line in `mkdocs.yml`. Formally linked to
+the issue with `Closes #215`.
+
+The description follows the repo's PR template section for section. It
+summarises each of the four FAQ sections and what in the code each one
+is grounded in — the single powercap path `_check_rapl()` probes and its
+silent debug-level fallback, the Boavizta load curve with the 25 W/65 W
+default TDP, the module-level import in `ml.py` that makes matplotlib
+unavoidable, and the stdlib logger. It states that the structure follows
+the maintainer's direction on the issue, and flags the one place I
+departed from pure link-out: the benchmark page carries two different
+error figures, so the FAQ names both rather than sending readers to pick
+between them unaided, with an offer to cut that if he'd rather the page
+stayed leaner. Every checklist item is answered with a number or a
+reason instead of a blind tick, including the disclosure that `flake8`
+reports 759 findings on this branch and 759 on `main`. It closes with
+the one thing I could not verify: I wrote this on an Apple silicon Mac
+where Intel RAPL cannot exist, so no `docker run` line went into the
+docs as though I had run it.
 
 **Maintainer Feedback:**
 
-- [Date]: [feedback received, or "none yet"; silence is a normal
-  state and costs you nothing]
-- [Date]: [how you addressed it]
+- 2026-11-01: Zwony (OWNER) replied to my claim comment on the issue in
+  31 minutes — the first issue comment in at least forty issues. He
+  assigned the work to me ("The issue is all yours") and answered the
+  open question I had raised: "Having a concise explanation in FAQ.md
+  that links directly to `benchmarks/07_accuracy_validation.md` for
+  in-depth details is the ideal approach. It keeps the FAQ scannable
+  while guiding readers to our detailed benchmarks."
+- 2026-11-01: Addressed before building rather than after. That was
+  already the default I had committed to in my claim, so no rework
+  followed; I closed the matching open risk in `plan.md` by citing his
+  words instead of leaving my assumption standing, and the PR
+  description credits the structure to him.
+- 2026-11-02: No feedback on the pull request itself yet. The only
+  thread entry is a SonarCloud bot reporting Quality Gate passed with 0
+  new issues. My playbook's first-response threshold is 3 days, and this
+  is well inside it, so the honest word is waiting rather than stale.
 
-**Status:** [Awaiting review / Iterating / Merged / Closed. The
-status is a fact you record, never a grade: the PR is graded as
-opened.]
+**Status:** Awaiting review. One check passing (SonarCloud), mergeable,
+merge state blocked pending review.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: the ship-gate (unit 7) before the PR, and the PR-monitor with my
+  playbook (unit 8) after it.
+- What it produced: the gate ran my manifest's two checks and then
+  pr-precheck over the branch, plan, evidence and description — four
+  rejects, then `ship-gate: PASS` across all seven checks. The monitor
+  read the live PR state and drafted a wait note rather than a reply.
+- Difficulties: every one of the gate's rejections was a number that had
+  drifted after I edited prose — a stale diff stat, evidence generated
+  at a superseded commit, a grep table reading 15 where the reworded
+  page gave 13. And the monitor's free `--state` canary mislabelled the
+  PR `FEEDBACK-IN` because a SonarCloud bot comment counts as a thread
+  entry; its full run caught that, but the canary on its own would have
+  sent me looking for a review that does not exist.
+- What changed: I stopped hand-copying numbers into the description and
+  regenerated them from the committed file, which is what finally held.
+  The monitor needs no change for me to use it, but the state label
+  should discount bot-authored comments — on any repo with CI bots it
+  will report `FEEDBACK-IN` on every PR the moment checks report.
 
 ---
 
@@ -714,25 +798,101 @@ opened.]
 
 **Technical Skills Gained**
 
-[What you learned technically, named concretely.]
+The fork-and-PR workflow end to end: fork, clone, branch, upstream
+remote, push to `origin`, open a cross-repo PR against someone else's
+`main`. That was the thing I actually came here to learn, and it is now
+muscle memory rather than a diagram.
+
+Reading an unfamiliar Python package well enough to write documentation
+nobody can argue with. Specifically: tracing a behaviour through
+`hardware.py` → `cpu.py` to find where a default comes from, and using
+`python -X importtime` and `sys.modules` to settle a question about an
+import chain that reading the source had answered incorrectly.
+
+MkDocs well enough to know that `mkdocs build` warns on a nav entry
+pointing at a missing file but still exits 0 — which is why I checked
+the warning text rather than the exit code.
+
+Writing a `gh search issues` query that actually samples a corpus rather
+than returning the newest 100 matches on GitHub, and the general lesson
+behind it: a filter that drops 0% or 100% of a real pool is not a
+filter, and I cannot tell which I have written without measuring.
 
 **Challenges Overcome**
 
-[What was hard and how you solved it; point at the real events, the
-Toolkit blocks above are full of them.]
+The recurring one, in four different costumes: I kept writing confident
+sentences I had not checked. My reproduction report said SUPPORT.md's
+RAPL hits were "in the hardware support tables" when they are a
+Troubleshooting entry. My plan quoted the accuracy page's ≤15% as the
+measured figure when its own run measured 40.3%. My FAQ nearly told
+people `import ecotrace` avoids loading matplotlib, which is false. My
+PR description carried a grep table that a later rewording had made
+wrong. Each was caught by a different tool — repro-check, plan-check, my
+own verification, the ship-gate — and none by me re-reading my own
+prose. What solved it was mechanical, not attitudinal: paste the command
+output next to the claim, and generate numbers from the file rather than
+copying them.
+
+The second was scope discipline under temptation. `ml.py`'s eager import
+defeating the lazy one in `core.py` is arguably a bug, and I found it.
+It is not this issue, the issue says not to touch `ecotrace/`, so it
+stayed out of the diff and went into the FAQ as a documented fact
+instead.
+
+The third was writing honestly about something I could not test. I am on
+Apple silicon, where Intel RAPL cannot exist, so the Docker guidance was
+unverifiable on my hardware. The fix was to stop trying to give an
+instruction and give a diagnosis instead — the two conditions that must
+hold, and a `cat` command to find out which is failing — which turned
+out to be more useful than the `docker run` line I had planned.
 
 **What I'd Do Differently Next Time**
 
-[Reflection on your process.]
+Ask the maintainer earlier, and assume less from metadata. My scout
+rejected this repo because nobody had ever answered an issue there, and
+I built a whole rubric patch around the theory that this maintainer only
+talks in the PR tab. He answered my question in 31 minutes. All forty of
+those prior issues were filed by him and not one asked him anything —
+the silence was the absence of questions, not the absence of a
+maintainer. I spent real effort modelling a person I could have just
+talked to.
+
+Verify before writing, not after. Every tool rejection I collected was
+cheap to fix and would have been cheaper to avoid; the cost was that
+three of them came after I had already written the prose around the
+wrong fact.
+
+And I would measure the search before trusting it. I shipped a ranking
+filter that fired on nothing, replaced it with one that fired on
+everything, and recorded the second as a fix — twice writing down a
+verification that only confirmed what I already believed.
 
 ---
 
 ## Resources Used
 
-[What actually helped, not a reading list. List things this story
-already shows you using: the doc you followed to set the environment
-up, the thread that explained the bug, the person who answered you.
-One real entry beats ten plausible ones.]
+What actually moved the work, in rough order of how much it mattered:
 
-- [Link to documentation that helped]
-- [Discussion, issue, or post that helped]
+- **Zwony's reply on the issue thread** —
+  https://github.com/Zwony/ecotrace/issues/215#issuecomment-6563399356 —
+  settled the structural question (concise FAQ, link out to the
+  benchmark page) before I had built the wrong thing. The single highest
+  value thing I got, in exchange for one question.
+- **`ecotrace/hardware.py`, `cpu.py`, `logger.py` and `ml.py`
+  themselves.** Three of the FAQ's four answers are not written down
+  anywhere in the project; they only exist in the source. The comment
+  "Fail silently to preserve the zero-config experience" on
+  `_check_rapl` is the single line that explains the whole Docker
+  section.
+- **`docs/benchmarks/07_accuracy_validation.md`** — the Boavizta curve
+  and both error figures. Also the page that taught me to check which
+  number on a page is measured and which is asserted.
+- **`python -X importtime` and `sys.modules`** — how I found out my
+  reading of the import chain was wrong before I published it.
+- **`docs/CONTRIBUTING.MD`** — the PR template requirements,
+  conventional-commit style, and the Discord pointer that explains why
+  the issue tracker looks so quiet. Worth noting its
+  `pip install -e ".[dev]"` does not work; there is no `dev` extra.
+- **`gh search issues --help` and GitHub's issue-search docs** — for
+  `--created`/`--updated` windows and `--no-assignee`, after my first
+  queries only ever returned the newest 100 issues on GitHub.
