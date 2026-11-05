@@ -666,7 +666,7 @@ confident sentence without pasting the output behind it. I had claimed
 a Troubleshooting entry, and reading them instead of counting them is
 what showed the gap is narrower than the issue implies.
 
-**2026-11-08**
+**2026-11-02**
 
 Installed the ship-gate against `~/Desktop/ecotrace` and wrote the
 manifest. Measured a baseline on `main` before touching anything, which
