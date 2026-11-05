@@ -160,6 +160,24 @@ label itself: `FEEDBACK-IN` should discount bot-authored comments, since
 on a repo with CI bots it will fire on every single PR the moment checks
 report.
 
+Two days later the monitor got a real `FEEDBACK-IN` to work with: Zwony
+requested changes on the PR with four inline comments. I ran the monitor
+again rather than skipping straight to a reply, and it drafted one that
+covered only three of the four, because it matched by theme from the
+commit messages rather than against the diff hunks Zwony had actually
+commented on; it also asked him to point out anything its themes missed,
+which would have put work back on him for something I could check
+myself. I rewrote the reply by going through his four comments one at a
+time, re-verifying each fix against the source again before describing
+it (the Apple-Silicon mistake turned out to be repeated a second time in
+a section neither the review nor the draft had flagged), and disclosed
+the diff's line-count drift rather than quietly fixing the number in my
+original description. The monitor's playbook rules did their job on the
+wording that survived: concede once, cite the SHA, no apology, no
+account of how the mistake happened. What I would not trust it to do
+unsupervised is matching review comments to commits — that step needs
+the diff open next to the review, not just the commit log.
+
 ---
 
 ## Why I Chose This Issue
@@ -763,13 +781,35 @@ docs as though I had run it.
   followed; I closed the matching open risk in `plan.md` by citing his
   words instead of leaving my assumption standing, and the PR
   description credits the structure to him.
-- 2026-11-02: No feedback on the pull request itself yet. The only
-  thread entry is a SonarCloud bot reporting Quality Gate passed with 0
-  new issues. My playbook's first-response threshold is 3 days, and this
-  is well inside it, so the honest word is waiting rather than stale.
+- 2026-11-03: Zwony requested changes on the PR itself, with four inline
+  comments, each pointing at a real gap between what the FAQ claimed and
+  what the code does: the RAPL path implied AMD was detected when only
+  Intel's is probed; the logging section said EcoTrace "won't warn you"
+  when `core.py` actually raises a visible `WARNING` on Linux once it
+  falls back; the page treated Apple Silicon as always-estimation when
+  `_check_apple_silicon()` probes `sudo -n powermetrics` and measures
+  directly when that succeeds; and the RAPL-vs-TDP section implied the
+  reported number was the raw counter delta when `_compute_carbon()`
+  scales it by utilisation and adds RAM energy before converting to
+  carbon.
+- 2026-11-04: Fixed all four, one commit each (`a903618`, `58796bb`,
+  `12c8ba3`, `3425f19`), each claim re-verified against the source before
+  I touched the prose — not just reworded. The same Apple-Silicon mistake
+  turned out to be repeated a second time, in the headless-CI section;
+  caught and fixed in the same commit rather than left for a second
+  round.
+- 2026-11-04: Posted the reply summarising the four fixes with their
+  commit SHAs, asked one open question (whether describing the
+  utilisation scaling as "attributing a share of package energy to the
+  measured process" was the right framing), and disclosed that the diff
+  had grown from 189 to 232 lines since the original description —
+  https://github.com/Zwony/ecotrace/pull/248#issuecomment-6646458120.
+  Requested re-review through GitHub's own control rather than a second
+  comment.
 
-**Status:** Awaiting review. One check passing (SonarCloud), mergeable,
-merge state blocked pending review.
+**Status:** Changes requested, addressed, re-review requested
+2026-11-04. One check passing (SonarCloud), mergeable, awaiting Zwony's
+second pass.
 
 **Toolkit**
 
